@@ -2,7 +2,10 @@ package net.raisetech.SpringBootSample.service;
 
 import net.raisetech.SpringBootSample.entity.Movie;
 import net.raisetech.SpringBootSample.entity.Name;
+import net.raisetech.SpringBootSample.form.CreateForm;
+import net.raisetech.SpringBootSample.form.UpdateForm;
 import net.raisetech.SpringBootSample.repository.NameMapper;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InaccessibleObjectException;
@@ -32,5 +35,21 @@ public class NameServiceImpl implements NameService {
     @Override
     public List<Movie> findByYear(int year) {
         return this.nameMapper.findByYear(year);
+    }
+    @Override
+    public void createName(CreateForm form) {
+        nameMapper.createName(form);
+    }
+    @Override
+    public void updateName(UpdateForm form) throws NotFoundException {
+        if (nameMapper.updateName(form) == 0) {
+            throw new NotFoundException("Name ID Not Found");
+        }
+    }
+    @Override
+    public void deleteName(int id) throws NotFoundException {
+        if (nameMapper.deleteName(id) == 0) {
+            throw new NotFoundException("Name ID Not Found");
+        }
     }
 }
